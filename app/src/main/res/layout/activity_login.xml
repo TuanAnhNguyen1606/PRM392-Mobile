@@ -11,7 +11,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <ImageView
             android:id="@+id/iconPicture"
             android:layout_width="72dp"
@@ -26,7 +25,7 @@
             android:id="@+id/welcome"
             android:layout_width="166dp"
             android:layout_height="24dp"
-            android:text="Welcome to Mouse Shop"
+            android:text="Welcome to Hyper Shop"
             android:layout_marginTop="20dp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,11 +67,12 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <EditText
+                android:id="@+id/LoginEmail"
                 android:layout_width="277dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="5dp"
-                android:hint="Your Username"
+                android:hint="Your Email"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -103,16 +103,26 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
 
             <EditText
+                android:id="@+id/LoginPassword"
                 android:layout_width="277dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="5dp"
                 android:hint="Your Password"
+                android:inputType="textPassword"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
         </LinearLayout>
-
+        <CheckBox
+            android:id="@+id/checkBoxRememberMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remember Me"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearPassword"/>
         <Button
             android:id="@+id/buttonLogin"
             android:layout_width="343dp"
@@ -127,7 +137,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearPassword"/>
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxRememberMe"/>
         <TextView
             android:id="@+id/or"
             android:layout_width="wrap_content"
@@ -161,6 +171,7 @@
         android:text="Don't have a account ?"
         />
         <TextView
+            android:id="@+id/textViewRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/donthave"
