@@ -1,6 +1,8 @@
 package com.example.projectprm392.controller;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -31,18 +33,26 @@ public class CartActivity extends AppCompatActivity implements OnCartUpdatedList
     private List<CartItem> cartItemList;
     private TextView totalCartPrice;
 
+    Button btnCheckout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
         recyclerViewCart = findViewById(R.id.recyclerViewCart);
+        btnCheckout = findViewById(R.id.button_checkout);
         cartItemList = CartManager.getInstance().getCartItems();
         totalCartPrice = findViewById(R.id.text_total);
         cartAdapter = new CartAdapter(this, cartItemList, this);
         recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewCart.setAdapter(cartAdapter);
-
+        btnCheckout.setOnClickListener(v -> {
+            double total = cartAdapter.getTotalCartPrice();
+            Intent intent = new Intent(CartActivity.this, CheckOutActivity.class);
+            intent.putExtra("TOTAL_PRICE", total);
+            startActivity(intent);
+        });
         updateTotalCartPrice();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);

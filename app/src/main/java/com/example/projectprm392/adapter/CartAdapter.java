@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,11 +77,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         Picasso.get().load(product.getProductImage()).into(holder.productImage);
 
         holder.increaseButton.setOnClickListener(v -> {
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            holder.quantity.setText("Quantity: " + cartItem.getQuantity());
-            listener.onCartUpdated();
+            if (cartItem.getQuantity() < product.getProductStock()) {
+                cartItem.setQuantity(cartItem.getQuantity() + 1);
+                holder.quantity.setText("Quantity: " + cartItem.getQuantity());
+                listener.onCartUpdated();
+            } else {
+                Toast.makeText(context, "Không đủ số lượng tồn kho cho sản phẩm này", Toast.LENGTH_SHORT).show();
+            }
         });
-
         holder.decreaseButton.setOnClickListener(v -> {
             if (cartItem.getQuantity() > 1) {
                 cartItem.setQuantity(cartItem.getQuantity() - 1);

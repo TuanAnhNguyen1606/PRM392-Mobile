@@ -83,14 +83,21 @@
                     response -> {
                         try {
                             String userEmail = response.getString("email");
-                            SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("email", userEmail);
-                            editor.putBoolean("isLoggedIn", true);
-                            editor.apply();
-                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
+                            int userID = response.getInt("userID");
+                            String status = response.getString("status");
+                            if(status.equals("Active")){
+                                SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("email", userEmail);
+                                editor.putInt("userID", userID);
+                                editor.putBoolean("isLoggedIn", true);
+                                editor.apply();
+                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }else{
+                                Toast.makeText(LoginActivity.this, "Tài khoản của bạn đã bị khóa", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();

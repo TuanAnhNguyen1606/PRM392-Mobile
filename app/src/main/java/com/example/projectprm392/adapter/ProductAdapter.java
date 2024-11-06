@@ -69,6 +69,7 @@ public class ProductAdapter extends BaseAdapter {
                 .into(viewHolder.productImage);
         viewHolder.productImage.setOnClickListener(v -> {
             Intent intent = new Intent(context, ProductDetailActivity.class);
+            intent.putExtra("PRODUCT_ID", product.getProductID());
             intent.putExtra("PRODUCT_NAME", product.getProductName());
             intent.putExtra("PRODUCT_PRICE", product.getProductPrice());
             intent.putExtra("PRODUCT_DESCRIPTION", product.getProductDescription());

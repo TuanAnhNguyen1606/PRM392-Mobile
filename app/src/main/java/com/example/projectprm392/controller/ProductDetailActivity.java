@@ -32,6 +32,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
         btnAddToCart = findViewById(R.id.button_add_to_cart);
         // Nhận Intent
+        int productID = getIntent().getIntExtra("PRODUCT_ID", 0);
         String productName = getIntent().getStringExtra("PRODUCT_NAME");
         double productPrice = getIntent().getDoubleExtra("PRODUCT_PRICE", 0);
         NumberFormat numberFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
@@ -61,18 +62,18 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
     private void AddToCart() {
         // Nhận thông tin sản phẩm từ Intent
+        int productID = getIntent().getIntExtra("PRODUCT_ID", 0);
         String productName = getIntent().getStringExtra("PRODUCT_NAME");
         double productPrice = getIntent().getDoubleExtra("PRODUCT_PRICE", 0);
         String productDescription = getIntent().getStringExtra("PRODUCT_DESCRIPTION");
         String productImage = getIntent().getStringExtra("PRODUCT_IMAGE");
         int stock = getIntent().getIntExtra("PRODUCT_STOCK", 0); // Thêm thông tin về stock
-
         if (stock <= 0) {
             Toast.makeText(this, "Sản phẩm đã hết hàng!", Toast.LENGTH_SHORT).show();
             return;
         }
         // Tạo sản phẩm mới và thêm vào giỏ hàng
-        Product product = new Product(0, productName, productDescription, productPrice, stock, productImage, null, 1);
+        Product product = new Product(productID, productName, productDescription, productPrice, stock, productImage, null, 1);
         CartManager.getInstance().addToCart(product, 1);
         Toast.makeText(this, "Sản phẩm đã được thêm vào giỏ hàng!", Toast.LENGTH_SHORT).show();
     }

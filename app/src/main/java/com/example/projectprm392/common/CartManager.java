@@ -24,7 +24,7 @@ public class CartManager {
     public void addToCart(Product product, int quantity) {
         CartItem existingItem = null;
         for (CartItem cartItem : cartItems) {
-            if (cartItem.getProduct().getProductName().equals(product.getProductName())) {
+            if (cartItem.getProduct().getProductID() == product.getProductID()) {
                 existingItem = cartItem;
                 break;
             }

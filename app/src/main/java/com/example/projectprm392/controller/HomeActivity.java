@@ -2,9 +2,12 @@ package com.example.projectprm392.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,13 +48,14 @@ public class HomeActivity extends AppCompatActivity {
     private List<Product> filteredProductList;
     private LinearLayout brandContainer;
     private List<Brand> brandList;
+    private EditText searchProductTXT;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         lvRecommendedLaptops = findViewById(R.id.lv_recommended_laptops);
         brandContainer = findViewById(R.id.brandContainer);
-
+        searchProductTXT = findViewById(R.id.et_search);
         productList = new ArrayList<>();
         filteredProductList = new ArrayList<>();
         brandList = new ArrayList<>();
@@ -61,11 +65,72 @@ public class HomeActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         BottomNavigationHandler.setupBottomNavigation(bottomNavigationView, this);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-
-        // Gọi phương thức để lấy dữ liệu
+        
         fetchProducts();
         fetchBrands();
+
+        searchProductTXT.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchProducts(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
+
+    private void searchProducts(String productName) {
+        filteredProductList.clear();
+        if (productName.isEmpty()) {
+            filteredProductList.addAll(productList);
+            productAdapter.notifyDataSetChanged();
+            return;
+        }
+        String url = "http://10.0.2.2:7025/api/Product/FindProductByName?productName=" + productName;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject productObject = response.getJSONObject(i);
+                                int productID = productObject.getInt("productID");
+                                String productName = productObject.getString("productName");
+                                double productPrice = productObject.getDouble("price");
+                                String productImage = productObject.getString("imageUrl");
+                                String productDescription = productObject.getString("description");
+                                int stock = productObject.getInt("stock");
+                                int brandID = productObject.getInt("brandID");
+                                String releaseDate = productObject.getString("releaseDate");
+
+                                Product product = new Product(productID, productName, productDescription, productPrice, stock, productImage, releaseDate, brandID);
+                                filteredProductList.add(product);
+                            }
+                            // Update the adapter with the new filtered list
+                            productAdapter.updateProductList(filteredProductList);
+                            productAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(HomeActivity.this, "Error fetching products: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // Add request to RequestQueue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonArrayRequest);
+    }
+
+
     private void fetchProducts() {
         String url = "http://10.0.2.2:7025/api/Product";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,

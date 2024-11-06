@@ -7,15 +7,19 @@ public class Order {
     private LocalDate OrderDate;
     private double TotalAmount;
     private int UserID;
+    private int ShippingAddressID;
+    private String Status;
 
     public Order() {
     }
 
-    public Order(int orderID, LocalDate orderDate, double totalAmount, int userID) {
+    public Order(int orderID, LocalDate orderDate, double totalAmount, int userID, int shippingAddressID, String status) {
         OrderID = orderID;
         OrderDate = orderDate;
         TotalAmount = totalAmount;
         UserID = userID;
+        ShippingAddressID = shippingAddressID;
+        Status = status;
     }
 
     public int getOrderID() {
@@ -48,5 +52,21 @@ public class Order {
 
     public void setUserID(int userID) {
         UserID = userID;
+    }
+
+    public int getShippingAddressID() {
+        return ShippingAddressID;
+    }
+
+    public void setShippingAddressID(int shippingAddressID) {
+        ShippingAddressID = shippingAddressID;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 }
